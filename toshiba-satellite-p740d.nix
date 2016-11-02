@@ -31,6 +31,7 @@
     domain = "hex7.com";
     hostName = "abraxas";
     wireless.enable = true;
+    useDHCP  = true;
     firewall = {
       enable = true;
       allowedTCPPorts = [ 22 ];
