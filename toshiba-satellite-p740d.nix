@@ -5,6 +5,8 @@
   #   ==> Toshiba Satellite P740D <==
   #
 
+  system.stateVersion = "16.09";
+
   imports = [ ./hardware-configuration.nix ];
 
   boot = {
@@ -15,7 +17,17 @@
     };
     extraModprobeConfig = "options snd_hda_intel enable=1,1";
     #blacklistedKernelModules = [ "snd_pcsp" ];
+    kernel.sysctl = {
+      "net.ipv4.tcp_keepalive_time" = 60;
+      "net.core.rmem_max" = 4194304;
+      "net.core.wmem_max" = 1048576;
+    };
   };
+
+  swapDevices = [
+    { device = "/swapfile000";
+      size = 16384; }
+  ];
 
   hardware = {
     trackpoint = {
@@ -43,10 +55,14 @@
     wheelNeedsPassword = false;
   };
 
-  time.timeZone = "US/Eastern";
+  time = {
+    timeZone = "America/New_York";
+    hardwareClockInLocalTime = true;
+  };
+
   i18n = {
      consoleKeyMap = "us";
-     #consoleFont = "Lat2-Terminus16";
+     consoleFont = "${pkgs.terminus_font}/share/consolefonts/ter-i16n.psf.gz";
      defaultLocale = "en_US.UTF-8";
   };
 
@@ -55,8 +71,69 @@
     #allowBroken = true;
   };
 
+  virtualisation = {
+     docker = {
+        enable = true;
+        storageDriver = "btrfs";
+     };
+     virtualbox = {
+        host.enable = true;
+     };
+  };
+
+  services = {
+    openssh.enable = true;
+    printing.enable = true;
+    locate.enable = true;
+    ntp.enable = true;
+    transmission.enable = true;
+    xserver = {
+       enable = true;
+       layout = "us";
+       displayManager.kdm.enable = true;
+       desktopManager.kde4.enable = true;
+       #windowManager.openbox.enable = true;
+    };
+  };
+
+  users.extraUsers = {
+    lori = {
+      isNormalUser = true;
+      createHome = true;
+      home = "/home/lori";
+      extraGroups = [ "transmission" ];
+      uid = 1002;
+    };
+    nando = {
+      isNormalUser = true;
+      createHome = true;
+      home = "/home/nando";
+      extraGroups = [ "wheel" "transmission" ];
+      uid = 1001;
+      openssh.authorizedKeys.keys = [ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCwH1rWuQJXZXXgyWmJp6ripDLSyTGteNkvsn4AO/Bqo+TWSX1bxmDH4uk94D2/YOsRQiPs+dDHuJuBIqZnZicnOhbQFzi4EegV1S9Xw4ZWzJu9JT6dcI3ThOlQ2LVeEYajo+A1eoTdr5Hkfs79w+9FvLjYHgbuhvcsR5n9jFHynM0JPjcnDR7wNnDdqFoQqUFHG6nyJ3MotUBQGWuH/iDGOxcefHCbazdYTj4nFtbVtkAX8qRDz0ajlXGIhCVnV5/K7U1ZpXOlRIc8Ylt/v3DQsyvedUIyPrGLvzYx1tJXTbPWK3gXHAYRvDsydrCGfwiVCPK29Vfewy8fBaO/tdJB" ];
+    };
+    root.openssh.authorizedKeys.keys = [ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCwH1rWuQJXZXXgyWmJp6ripDLSyTGteNkvsn4AO/Bqo+TWSX1bxmDH4uk94D2/YOsRQiPs+dDHuJuBIqZnZicnOhbQFzi4EegV1S9Xw4ZWzJu9JT6dcI3ThOlQ2LVeEYajo+A1eoTdr5Hkfs79w+9FvLjYHgbuhvcsR5n9jFHynM0JPjcnDR7wNnDdqFoQqUFHG6nyJ3MotUBQGWuH/iDGOxcefHCbazdYTj4nFtbVtkAX8qRDz0ajlXGIhCVnV5/K7U1ZpXOlRIc8Ylt/v3DQsyvedUIyPrGLvzYx1tJXTbPWK3gXHAYRvDsydrCGfwiVCPK29Vfewy8fBaO/tdJB" ];
+  };
+
   environment.systemPackages = with pkgs; [
     wget
+    curl
+    bind
+    sysstat
+    vnstat
+    dstat
+    htop
+    screen
+    nmap
+    unzip
+    nload
+    iftop
+    iptraf-ng
+    bmon
+    tcptrack
+    slurm-llnl-full
+    nethogs
+    speedtest-cli
     vim
     vimPlugins.vim-nix
     vimPlugins.vim-go
@@ -86,27 +163,19 @@
     vlc
     mplayer
     ruby
-    python27Full
+    python27
     python27Packages.virtualenv
     awscli
     nginx
-    htop
     gnupg
     parted
-    nmap
     imagemagick
-    screen
     xpdf
-    unzip
     qutebrowser
     vivaldi
     dillo
     arora
     conkeror
-    bind
-    sysstat
-    vnstat
-    dstat
     transmission
     transgui
     xscreensaver
@@ -127,44 +196,45 @@
     #xmms
   ];
 
-  services = {
-    openssh.enable = true;
-    printing.enable = true;
-    locate.enable = true;
-    ntp.enable = true;
-    transmission.enable = true;
-    xserver = {
-      enable = true;
-      layout = "us";
-      displayManager.kdm.enable = true;
-      desktopManager.kde4.enable = true;
-      #windowManager.openbox.enable = true;
-    };
+  fonts = {
+    enableFontDir = true;
+    enableGhostscriptFonts = true;
+    fonts = with pkgs; [
+      terminus_font
+      noto-fonts
+      noto-fonts-emoji
+      cantarell_fonts
+      dejavu_fontsEnv
+      dejavu_fonts
+      dina-font
+      dina-font-pcf
+      dosemu_fonts
+      font-awesome-ttf
+      font-droid
+      freefont_ttf
+      gohufont
+      gyre-fonts
+      hack-font
+      ipaexfont
+      ipafont
+      kawkab-mono-font
+      liberation_ttf
+      mplus-outline-fonts
+      norwester-font
+      oxygenfonts
+      profont
+      proggyfonts
+      tewi-font
+      ttmkfdir
+      ubuntu_font_family
+      ucs-fonts
+      unifont
+      unifont_upper
+      urxvt_font_size
+      vistafonts
+      xfontsel
+      xlsfonts
+    ];
   };
-
-  virtualisation.docker = {
-    enable = true;
-    storageDriver = "btrfs";
-  };
-
-  users.extraUsers = {
-    lori = {
-      isNormalUser = true;
-      createHome = true;
-      home = "/home/lori";
-      uid = 1000;
-    };
-    nando = {
-      isNormalUser = true;
-      createHome = true;
-      home = "/home/nando";
-      extraGroups = [ "wheel" ];
-      uid = 1001;
-      openssh.authorizedKeys.keys = [ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCwH1rWuQJXZXXgyWmJp6ripDLSyTGteNkvsn4AO/Bqo+TWSX1bxmDH4uk94D2/YOsRQiPs+dDHuJuBIqZnZicnOhbQFzi4EegV1S9Xw4ZWzJu9JT6dcI3ThOlQ2LVeEYajo+A1eoTdr5Hkfs79w+9FvLjYHgbuhvcsR5n9jFHynM0JPjcnDR7wNnDdqFoQqUFHG6nyJ3MotUBQGWuH/iDGOxcefHCbazdYTj4nFtbVtkAX8qRDz0ajlXGIhCVnV5/K7U1ZpXOlRIc8Ylt/v3DQsyvedUIyPrGLvzYx1tJXTbPWK3gXHAYRvDsydrCGfwiVCPK29Vfewy8fBaO/tdJB" ];
-    };
-    root.openssh.authorizedKeys.keys = [ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCwH1rWuQJXZXXgyWmJp6ripDLSyTGteNkvsn4AO/Bqo+TWSX1bxmDH4uk94D2/YOsRQiPs+dDHuJuBIqZnZicnOhbQFzi4EegV1S9Xw4ZWzJu9JT6dcI3ThOlQ2LVeEYajo+A1eoTdr5Hkfs79w+9FvLjYHgbuhvcsR5n9jFHynM0JPjcnDR7wNnDdqFoQqUFHG6nyJ3MotUBQGWuH/iDGOxcefHCbazdYTj4nFtbVtkAX8qRDz0ajlXGIhCVnV5/K7U1ZpXOlRIc8Ylt/v3DQsyvedUIyPrGLvzYx1tJXTbPWK3gXHAYRvDsydrCGfwiVCPK29Vfewy8fBaO/tdJB" ];
-  };
-
-  system.stateVersion = "16.09";
 
 }
