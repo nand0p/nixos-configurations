@@ -9,8 +9,6 @@
   imports = [
     ./hardware-configuration.nix
     ./hosts.nix
-    ./buildbot.nix
-    #./hologram.nix
   ];
 
   system = {
@@ -18,7 +16,7 @@
     copySystemConfiguration = true;
     autoUpgrade = {
       channel= "https://nixos.org/channels/nixos-unstable";
-      enable = true;
+      enable = false;
     };
   };
 
@@ -61,10 +59,10 @@
       allowPing = true;
     };
     interfaces.enp2s0 = {
-      ipAddress = "192.168.140.13";
+      ipAddress = "192.168.100.13";
       prefixLength = 24;
     };
-    defaultGateway = "192.168.140.1";
+    defaultGateway = "192.168.100.1";
     nameservers = [ "8.8.8.8" ];
   };
 
@@ -96,13 +94,12 @@
   services = {
     openssh.enable = true;
     locate.enable = true;
-    ntp.enable = true;
     transmission.enable = true;
     xserver = {
       enable = true;
       layout = "us";
       #autorun = false;
-      desktopManager.kde5.enable = true;
+      desktopManager.plasma5.enable = true;
       displayManager.sddm.enable = true;
       #displayManager.kdm.enable = true;
       #desktopManager.kde4.enable = true;
@@ -113,8 +110,16 @@
       #drivers = [ pkgs.gutenprint ];
     };
     hologram-agent = {
-      enable = true;
+      enable = false;
       dialAddress = "hologram:3100";
+    };
+    buildbot-master = {
+      enable = true;
+      package = pkgs.buildbot-ui;
+      masterCfg = /etc/nixos/buildbot/master.cfg;
+    };
+    buildbot-worker = {
+      enable = true;
     };
   };
 
@@ -207,13 +212,19 @@
           name = Fernando J Pando
       '';
     };
+
+    variables = {
+      NIX_PATH = pkgs.lib.mkOverride 0 "nixpkgs=/etc/nixos/nixpkgs:nixos-config=/etc/nixos/configuration.nix";
+      BROWSER = "google-chrome-stable";
+      EDITOR = "vim";
+      AWS_DEFAULT_REGION = "us-east-1";
+    };
+
     interactiveShellInit = ''
       alias mkpass="openssl rand -base64"
       export PS1="\[$(tput setaf 10)\]\h \[$(tput setaf 13)\]\$(git branch 2>/dev/null | grep '^*' | colrm 1 2) \[$(tput setaf 12)\]\$PWD \[$(tput setaf 5)\]:\[$(tput sgr0)\]\T\[$(tput setaf 5)\]: \[$(tput sgr0)\]";
-      export BROWSER=google-chrome-stable;
-      export EDITOR=vim;
-      export AWS_DEFAULT_REGION=us-east-1;
     '';
+
     systemPackages = with pkgs; [
       wget
       curl
@@ -286,16 +297,23 @@
       screen
       qemu
       smartmontools
-      wireshark
       mkpasswd
       openssl
       file
       telnet
+      git-review
+      electricsheep
+      gcc
+      binutils
+      buildbot-full
+      buildbot-worker
+      ansible2
+      wireshark
+      kdiff3
+      hologram
 
       #BROKEN
-      #electricsheep
       #xpdf
-      #ansible2
 
       #MISSING
       #gerrit
