@@ -8,11 +8,11 @@
 
   imports = [
     ./hardware-configuration.nix
-    ./hosts.nix
+    ./private.nix
   ];
 
   system = {
-    stateVersion = "17.03";
+    stateVersion = "17.09";
     copySystemConfiguration = true;
     autoUpgrade = {
       channel= "https://nixos.org/channels/nixos-unstable";
@@ -101,9 +101,6 @@
       #autorun = false;
       desktopManager.plasma5.enable = true;
       displayManager.sddm.enable = true;
-      #displayManager.kdm.enable = true;
-      #desktopManager.kde4.enable = true;
-      #windowManager.openbox.enable = true;
     };
     printing = {
       enable = true;
@@ -121,32 +118,6 @@
     buildbot-worker = {
       enable = true;
     };
-  };
-
-  users.extraUsers = {
-    jenkins = {
-      isNormalUser = true;
-      createHome = false;
-      home = "/var/jenkins_home";
-      extraGroups = [ "docker" "vboxusers" ];
-      uid = 1000;
-    };
-    lori = {
-      isNormalUser = true;
-      createHome = true;
-      home = "/home/lori";
-      extraGroups = [ "transmission" "docker" ];
-      uid = 1002;
-    };
-    nando = {
-      isNormalUser = true;
-      createHome = true;
-      home = "/home/nando";
-      extraGroups = [ "wheel" "transmission" "docker" "vboxusers" ];
-      uid = 1001;
-      openssh.authorizedKeys.keys = [ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCwH1rWuQJXZXXgyWmJp6ripDLSyTGteNkvsn4AO/Bqo+TWSX1bxmDH4uk94D2/YOsRQiPs+dDHuJuBIqZnZicnOhbQFzi4EegV1S9Xw4ZWzJu9JT6dcI3ThOlQ2LVeEYajo+A1eoTdr5Hkfs79w+9FvLjYHgbuhvcsR5n9jFHynM0JPjcnDR7wNnDdqFoQqUFHG6nyJ3MotUBQGWuH/iDGOxcefHCbazdYTj4nFtbVtkAX8qRDz0ajlXGIhCVnV5/K7U1ZpXOlRIc8Ylt/v3DQsyvedUIyPrGLvzYx1tJXTbPWK3gXHAYRvDsydrCGfwiVCPK29Vfewy8fBaO/tdJB" ];
-    };
-    root.openssh.authorizedKeys.keys = [ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCwH1rWuQJXZXXgyWmJp6ripDLSyTGteNkvsn4AO/Bqo+TWSX1bxmDH4uk94D2/YOsRQiPs+dDHuJuBIqZnZicnOhbQFzi4EegV1S9Xw4ZWzJu9JT6dcI3ThOlQ2LVeEYajo+A1eoTdr5Hkfs79w+9FvLjYHgbuhvcsR5n9jFHynM0JPjcnDR7wNnDdqFoQqUFHG6nyJ3MotUBQGWuH/iDGOxcefHCbazdYTj4nFtbVtkAX8qRDz0ajlXGIhCVnV5/K7U1ZpXOlRIc8Ylt/v3DQsyvedUIyPrGLvzYx1tJXTbPWK3gXHAYRvDsydrCGfwiVCPK29Vfewy8fBaO/tdJB" ];
   };
 
   programs = {
@@ -311,6 +282,7 @@
       wireshark
       kdiff3
       hologram
+      libreoffice
 
       #BROKEN
       #xpdf
