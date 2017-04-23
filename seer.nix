@@ -283,6 +283,9 @@
       kdiff3
       hologram
       libreoffice
+      spectacle
+      atari800
+      stella
 
       #BROKEN
       #xpdf

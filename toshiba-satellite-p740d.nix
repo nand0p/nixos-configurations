@@ -1,13 +1,22 @@
 { config, pkgs, ... }:
 {
   #
-  # This NixOS configuration is for the
   #   ==> Toshiba Satellite P740D <==
   #
 
-  system.stateVersion = "16.09";
+  system = {
+    stateVersion = "17.09";
+    copySystemConfiguration = true;
+    autoUpgrade = {
+      channel= "https://nixos.org/channels/nixos-unstable";
+      enable = false;
+    };
+  };
 
-  imports = [ ./hardware-configuration.nix ];
+  imports = [
+    ./hardware-configuration.nix
+    ./private.nix
+  ];
 
   boot = {
     loader.grub = {
@@ -90,29 +99,10 @@
     xserver = {
        enable = true;
        layout = "us";
-       displayManager.kdm.enable = true;
-       desktopManager.kde4.enable = true;
+       desktopManager.plasma5.enable = true;
+       displayManager.sddm.enable = true;
        #windowManager.openbox.enable = true;
     };
-  };
-
-  users.extraUsers = {
-    lori = {
-      isNormalUser = true;
-      createHome = true;
-      home = "/home/lori";
-      extraGroups = [ "transmission" ];
-      uid = 1002;
-    };
-    nando = {
-      isNormalUser = true;
-      createHome = true;
-      home = "/home/nando";
-      extraGroups = [ "wheel" "transmission" ];
-      uid = 1001;
-      openssh.authorizedKeys.keys = [ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCwH1rWuQJXZXXgyWmJp6ripDLSyTGteNkvsn4AO/Bqo+TWSX1bxmDH4uk94D2/YOsRQiPs+dDHuJuBIqZnZicnOhbQFzi4EegV1S9Xw4ZWzJu9JT6dcI3ThOlQ2LVeEYajo+A1eoTdr5Hkfs79w+9FvLjYHgbuhvcsR5n9jFHynM0JPjcnDR7wNnDdqFoQqUFHG6nyJ3MotUBQGWuH/iDGOxcefHCbazdYTj4nFtbVtkAX8qRDz0ajlXGIhCVnV5/K7U1ZpXOlRIc8Ylt/v3DQsyvedUIyPrGLvzYx1tJXTbPWK3gXHAYRvDsydrCGfwiVCPK29Vfewy8fBaO/tdJB" ];
-    };
-    root.openssh.authorizedKeys.keys = [ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCwH1rWuQJXZXXgyWmJp6ripDLSyTGteNkvsn4AO/Bqo+TWSX1bxmDH4uk94D2/YOsRQiPs+dDHuJuBIqZnZicnOhbQFzi4EegV1S9Xw4ZWzJu9JT6dcI3ThOlQ2LVeEYajo+A1eoTdr5Hkfs79w+9FvLjYHgbuhvcsR5n9jFHynM0JPjcnDR7wNnDdqFoQqUFHG6nyJ3MotUBQGWuH/iDGOxcefHCbazdYTj4nFtbVtkAX8qRDz0ajlXGIhCVnV5/K7U1ZpXOlRIc8Ylt/v3DQsyvedUIyPrGLvzYx1tJXTbPWK3gXHAYRvDsydrCGfwiVCPK29Vfewy8fBaO/tdJB" ];
   };
 
   environment.systemPackages = with pkgs; [
@@ -179,19 +169,7 @@
     transmission
     transgui
     xscreensaver
-    kde4.kdeadmin
-    kde4.kdeartwork
-    kde4.kdebindings
-    kde4.kdegraphics
-    kde4.kdelibs
-    kde4.kdemultimedia
-    kde4.kdenetwork
-    kde4.kdepim
-    kde4.kdesdk
-    kde4.kdeutils
 
-    #gerrit
-    #puppet
     #sonos
     #xmms
   ];
