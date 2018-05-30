@@ -1,5 +1,4 @@
 { config, pkgs, ... }:
-
 {
 
   #
@@ -12,7 +11,7 @@
   ];
 
   system = {
-    stateVersion = "17.09";
+    nixos.stateVersion = "18.03";
     copySystemConfiguration = true;
     autoUpgrade = {
       channel= "https://nixos.org/channels/nixos-unstable";
@@ -24,6 +23,7 @@
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
+      grub.memtest86 = true;
     };
     kernel.sysctl = {
       "net.ipv4.tcp_keepalive_time" = 60;
@@ -58,10 +58,10 @@
       allowedTCPPorts = [ 22 80 443 8010 8080 8888 ];
       allowPing = true;
     };
-    interfaces.enp2s0 = {
-      ipAddress = "192.168.100.13";
+    interfaces.enp4s0.ipv4.addresses = [ {
+      address = "192.168.100.13";
       prefixLength = 24;
-    };
+    } ];
     defaultGateway = "192.168.100.1";
     nameservers = [ "8.8.8.8" ];
   };
@@ -78,7 +78,7 @@
 
   nixpkgs.config = {
     allowUnfree = true;
-    #allowBroken = true;
+    allowBroken = true;
   };
 
   virtualisation = {
@@ -95,6 +95,7 @@
     openssh.enable = true;
     locate.enable = true;
     transmission.enable = true;
+    cron.enable = true;
     xserver = {
       enable = true;
       layout = "us";
@@ -106,18 +107,18 @@
       enable = true;
       #drivers = [ pkgs.gutenprint ];
     };
-    hologram-agent = {
-      enable = false;
-      dialAddress = "hologram:3100";
-    };
-    buildbot-master = {
-      enable = true;
-      package = pkgs.buildbot-ui;
-      masterCfg = /etc/nixos/buildbot/master.cfg;
-    };
-    buildbot-worker = {
-      enable = true;
-    };
+    #hologram-agent = {
+    #  enable = false;
+    #  dialAddress = "hologram:3100";
+    #};
+    #buildbot-master = {
+    #  enable = false;
+    #  package = pkgs.buildbot-full;
+    #  masterCfg = /etc/nixos/buildbot/master.cfg;
+    #};
+    #buildbot-worker = {
+    #  enable = false;
+    #};
   };
 
   programs = {
@@ -135,41 +136,10 @@
     enableGhostscriptFonts = true;
     fonts = with pkgs; [
       terminus_font
-      kochi-substitute-naga10
-      source-code-pro
-      noto-fonts
-      noto-fonts-emoji
-      cantarell_fonts
-      dejavu_fontsEnv
-      dejavu_fonts
-      dina-font
-      dina-font-pcf
-      dosemu_fonts
       font-awesome-ttf
-      font-droid
       freefont_ttf
-      gohufont
-      gyre-fonts
       hack-font
-      ipaexfont
-      ipafont
-      kawkab-mono-font
       liberation_ttf
-      mplus-outline-fonts
-      norwester-font
-      oxygenfonts
-      profont
-      proggyfonts
-      tewi-font
-      ttmkfdir
-      ubuntu_font_family
-      ucs-fonts
-      unifont
-      unifont_upper
-      urxvt_font_size
-      vistafonts
-      xfontsel
-      xlsfonts
     ];
   };
 
@@ -208,6 +178,7 @@
       tmux
       mosh
       nmap
+      zip
       unzip
       nload
       iftop
@@ -244,9 +215,11 @@
       vlc
       mplayer
       ruby
-      python27
-      python27Packages.virtualenv
-      awscli
+      python3
+      python3Packages.virtualenv
+      python3Packages.distutils_extra
+      python3Packages.boto3
+      python3Packages.psycopg2
       nginx
       gnupg
       parted
@@ -259,7 +232,6 @@
       transmission
       transgui
       virtualbox
-      go-mtpfs
       xscreensaver
       xorg.xhost
       hdparm
@@ -272,25 +244,59 @@
       openssl
       file
       telnet
-      git-review
       electricsheep
       gcc
       binutils
-      buildbot-full
-      buildbot-worker
       ansible2
       wireshark
       kdiff3
       hologram
-      libreoffice
       spectacle
       atari800
       stella
+      vpnc
+      openconnect
+      jq
+      traceroute
+      atop
+      steam
+      libffi
+      bundler
+      exiftool
+      nodejs-9_x
+      maven
+      jdk8
+      postgresql96
+      libpqxx
+      groff
+      go-mtpfs
+      xpdf
+      git-review
+      buildbot-full
+      buildbot-worker
+      kubernetes
+      gpgme
+      sddm
+      cmake
+      boost
+      libofx
+      cpuminer
+      cpuminer-multi
+      libreoffice
+      awscli
+      iotop
+      atop
+      ctop
+      ftop
+      beep
+      php
+      ib-tws
+      jdk8
+      pinentry
 
-      #BROKEN
-      #xpdf
+      # BROKEN
 
-      #MISSING
+      # MISSING
       #gerrit
       #puppet
       #sonos
