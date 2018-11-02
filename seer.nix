@@ -11,7 +11,7 @@
   ];
 
   system = {
-    nixos.stateVersion = "18.03";
+    stateVersion = "19.03";
     copySystemConfiguration = true;
     autoUpgrade = {
       channel= "https://nixos.org/channels/nixos-unstable";
@@ -45,7 +45,13 @@
       speed = 50;
       fakeButtons = false;
     };
-    pulseaudio.enable = true;
+    pulseaudio = {
+      enable = true;
+      support32Bit = true;
+    };
+    opengl.driSupport32Bit = true;
+    enableAllFirmware = true;
+    enableRedistributableFirmware = true;
   };
 
   networking = {
@@ -107,6 +113,10 @@
       enable = true;
       #drivers = [ pkgs.gutenprint ];
     };
+    udev.extraRules = ''
+      SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", MODE="0666"
+      KERNEL=="uinput", MODE="0660", GROUP="users", OPTIONS+="static_node=uinput"
+    '';
     #hologram-agent = {
     #  enable = false;
     #  dialAddress = "hologram:3100";
@@ -218,8 +228,9 @@
       python3
       python3Packages.virtualenv
       python3Packages.distutils_extra
-      python3Packages.boto3
       python3Packages.psycopg2
+      python3Packages.boto3
+      awscli
       nginx
       gnupg
       parted
@@ -248,22 +259,19 @@
       gcc
       binutils
       ansible2
-      wireshark
       kdiff3
       hologram
       spectacle
-      atari800
       stella
       vpnc
       openconnect
       jq
       traceroute
       atop
-      steam
       libffi
       bundler
       exiftool
-      nodejs-9_x
+      nodejs-10_x
       maven
       jdk8
       postgresql96
@@ -272,8 +280,6 @@
       go-mtpfs
       xpdf
       git-review
-      buildbot-full
-      buildbot-worker
       kubernetes
       gpgme
       sddm
@@ -283,7 +289,6 @@
       cpuminer
       cpuminer-multi
       libreoffice
-      awscli
       iotop
       atop
       ctop
@@ -293,8 +298,22 @@
       ib-tws
       jdk8
       pinentry
+      wireshark
+      httperf
+      hostapd
+      wirelesstools
+      pcmciaUtils
+      cdrtools
+      lsscsi
+      lshw
+
+      # GAMES
+      atari800
+      steam
 
       # BROKEN
+      #buildbot-full
+      #buildbot-worker
 
       # MISSING
       #gerrit
