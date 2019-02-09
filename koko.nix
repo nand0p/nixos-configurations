@@ -8,11 +8,16 @@
   imports = [
     ./hardware-configuration.nix
     ./private.nix
+    ./ethminer.nix
   ];
 
   system = {
     stateVersion = "18.09";
     copySystemConfiguration = true;
+    #autoUpgrade = {
+    #  channel= "https://nixos.org/channels/nixos-unstable";
+    #  enable = false;
+    #};
   };
 
   boot = {
@@ -82,6 +87,8 @@
     allowUnfree = true;
     allowBroken = true;
     oraclejdk.accept_license = true;
+    cudaSupport = true;
+    enableCuda = true;
   };
 
   virtualisation = {
@@ -151,6 +158,7 @@
     };
 
     variables = {
+      #NIX_PATH = pkgs.lib.mkOverride 0 "nixpkgs=/etc/nixos/nixpkgs:nixos-config=/etc/nixos/configuration.nix";
       NIX_PATH = pkgs.lib.mkOverride 0 "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos:nixos-config=/etc/nixos/configuration.nix";
       BROWSER = "google-chrome-stable";
       EDITOR = "vim";
@@ -241,7 +249,6 @@
       openssl
       file
       telnet
-      electricsheep
       gcc
       binutils
       ansible2
@@ -292,6 +299,12 @@
       cdrtools
       lsscsi
       lshw
+      cudatoolkit
+      stdenv
+      gnumake
+      autoconf
+      automake
+      patchelf
 
       # GAMES
       atari800
@@ -300,6 +313,7 @@
       #buildbot-full
       #buildbot-worker
       #steam
+      #electricsheep
 
       # MISSING
       #gerrit
