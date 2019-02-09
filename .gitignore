@@ -1,0 +1,4 @@
+nixpkgs/
+private.nix
+*configuration.nix*
+*.jar
