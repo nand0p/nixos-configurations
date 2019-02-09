@@ -1,4 +1,4 @@
 nixpkgs/
 private.nix
-hardware-configuration.nix
+*configuration.nix*
 *.jar
