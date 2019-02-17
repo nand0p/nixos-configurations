@@ -139,6 +139,7 @@
       gerrit
       steam
       ethash
+      ethminer
       pkg-config
 
       #python3Packages.buildbot-full
