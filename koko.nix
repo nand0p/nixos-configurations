@@ -7,13 +7,14 @@
 
   imports = [
     ./hardware-configuration.nix
+    ./packages.nix
     ./private.nix
-    ./ethminer.nix
+    #./ethminer.nix
   ];
 
   system = {
-    stateVersion = "18.09";
     copySystemConfiguration = true;
+    #stateVersion = "18.09";
     #autoUpgrade = {
     #  channel= "https://nixos.org/channels/nixos-unstable";
     #  enable = false;
@@ -26,11 +27,11 @@
       efi.canTouchEfiVariables = true;
       grub.memtest86 = true;
     };
-    kernel.sysctl = {
-      "net.ipv4.tcp_keepalive_time" = 60;
-      "net.core.rmem_max" = 4194304;
-      "net.core.wmem_max" = 1048576;
-    };
+    #kernel.sysctl = {
+    #  "net.ipv4.tcp_keepalive_time" = 60;
+    #  "net.core.rmem_max" = 4194304;
+    #  "net.core.wmem_max" = 1048576;
+    #};
   };
 
   i18n = {
@@ -43,7 +44,7 @@
     trackpoint = {
       enable = true;
       sensitivity = 50;
-      speed = 50;
+      speed = 40;
       fakeButtons = false;
     };
     pulseaudio = {
@@ -70,7 +71,10 @@
       prefixLength = 24;
     } ];
     defaultGateway = "192.168.100.1";
-    nameservers = [ "8.8.8.8" ];
+    nameservers = [
+      "8.8.8.8"
+      "8.8.4.4"
+    ];
   };
 
   security.sudo = {
@@ -110,7 +114,7 @@
       videoDrivers = [ "nvidia" ];
       enable = true;
       layout = "us";
-      #autorun = false;
+      autorun = true;
       desktopManager.plasma5.enable = true;
       displayManager.sddm.enable = true;
     };
@@ -118,10 +122,10 @@
       enable = true;
       #drivers = [ pkgs.gutenprint ];
     };
-    udev.extraRules = ''
-      SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", MODE="0666"
-      KERNEL=="uinput", MODE="0660", GROUP="users", OPTIONS+="static_node=uinput"
-    '';
+    #udev.extraRules = ''
+    #  SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", MODE="0666"
+    #  KERNEL=="uinput", MODE="0660", GROUP="users", OPTIONS+="static_node=uinput"
+    #'';
   };
 
   programs = {
@@ -137,13 +141,12 @@
     enableCoreFonts = true;
     enableFontDir = true;
     enableGhostscriptFonts = true;
-    fonts = with pkgs; [
-      terminus_font
-      font-awesome-ttf
-      freefont_ttf
-      hack-font
-      liberation_ttf
-    ];
+    #fonts = with pkgs; [
+    #  terminus_font
+    #  font-awesome-ttf
+    #  freefont_ttf
+    #  hack-font
+    #  liberation_ttf# ];
   };
 
   environment = {
@@ -158,169 +161,17 @@
     };
 
     variables = {
-      #NIX_PATH = pkgs.lib.mkOverride 0 "nixpkgs=/etc/nixos/nixpkgs:nixos-config=/etc/nixos/configuration.nix";
-      NIX_PATH = pkgs.lib.mkOverride 0 "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos:nixos-config=/etc/nixos/configuration.nix";
+      NIX_PATH = pkgs.lib.mkOverride 0 "nixpkgs=/etc/nixos/nixpkgs:nixos-config=/etc/nixos/configuration.nix";
+      #NIX_PATH = pkgs.lib.mkOverride 0 "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos:nixos-config=/etc/nixos/configuration.nix";
       BROWSER = "google-chrome-stable";
       EDITOR = "vim";
       AWS_DEFAULT_REGION = "us-east-1";
     };
 
     interactiveShellInit = ''
-      alias mkpass="openssl rand -base64"
+      alias mkpass="openssl rand -base64 16"
       export PS1="\[$(tput setaf 10)\]\h \[$(tput setaf 13)\]\$(git branch 2>/dev/null | grep '^*' | colrm 1 2) \[$(tput setaf 12)\]\$PWD \[$(tput setaf 5)\]:\[$(tput sgr0)\]\T\[$(tput setaf 5)\]: \[$(tput sgr0)\]";
     '';
 
-    systemPackages = with pkgs; [
-      wget
-      curl
-      bind
-      sysstat
-      vnstat
-      dstat
-      htop
-      screen
-      tmux
-      mosh
-      nmap
-      zip
-      unzip
-      nload
-      iftop
-      iptraf-ng
-      bmon
-      tcptrack
-      slurm-llnl-full
-      nethogs
-      speedtest-cli
-      vim
-      vimPlugins.vim-nix
-      vimPlugins.vim-go
-      vimPlugins.vim-jsonnet
-      vimPlugins.vim-jinja
-      firefox
-      lsof
-      pciutils
-      tcpdump
-      netcat
-      jwhois
-      strace
-      google-chrome
-      spotify
-      openvpn
-      gimp
-      go
-      docker
-      terraform
-      chefdk
-      vagrant
-      packer
-      jenkins
-      git
-      vlc
-      mplayer
-      ruby
-      python3
-      python3Packages.virtualenv
-      python3Packages.distutils_extra
-      python3Packages.psycopg2
-      python3Packages.boto3
-      awscli
-      nginx
-      gnupg
-      parted
-      imagemagick
-      qutebrowser
-      vivaldi
-      dillo
-      arora
-      conkeror
-      transmission
-      transgui
-      virtualbox
-      xscreensaver
-      xorg.xhost
-      hdparm
-      gparted
-      dmidecode
-      screen
-      qemu
-      smartmontools
-      mkpasswd
-      openssl
-      file
-      telnet
-      gcc
-      binutils
-      ansible2
-      kdiff3
-      hologram
-      spectacle
-      stella
-      vpnc
-      openconnect
-      jq
-      traceroute
-      atop
-      libffi
-      bundler
-      exiftool
-      nodejs-10_x
-      maven
-      jdk8
-      postgresql96
-      libpqxx
-      groff
-      go-mtpfs
-      xpdf
-      git-review
-      kubernetes
-      gpgme
-      sddm
-      cmake
-      boost
-      libofx
-      cpuminer
-      cpuminer-multi
-      libreoffice
-      iotop
-      atop
-      ctop
-      ftop
-      beep
-      php
-      ib-tws
-      jdk8
-      pinentry
-      wireshark
-      httperf
-      hostapd
-      wirelesstools
-      pcmciaUtils
-      cdrtools
-      lsscsi
-      lshw
-      cudatoolkit
-      stdenv
-      gnumake
-      autoconf
-      automake
-      patchelf
-
-      # GAMES
-      atari800
-
-      # BROKEN
-      #buildbot-full
-      #buildbot-worker
-      #steam
-      #electricsheep
-
-      # MISSING
-      #gerrit
-      #puppet
-      #sonos
-      #xmms
-    ];
   };
-
 }
