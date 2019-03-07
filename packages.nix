@@ -23,10 +23,6 @@
       nethogs
       speedtest-cli
       vim
-      vimPlugins.vim-nix
-      vimPlugins.vim-go
-      vimPlugins.vim-jsonnet
-      vimPlugins.vim-jinja
       firefox
       lsof
       pciutils
@@ -81,9 +77,8 @@
       telnet
       gcc
       binutils
-      ansible2
+      ansible
       kdiff3
-      hologram
       spectacle
       stella
       vpnc
@@ -109,27 +104,19 @@
       cmake
       boost
       libofx
-      cpuminer
-      cpuminer-multi
       libreoffice
       iotop
       atop
       ctop
       ftop
-      beep
       php
-      ib-tws
       jdk8
       pinentry
       wireshark
       httperf
-      hostapd
-      wirelesstools
-      pcmciaUtils
       cdrtools
       lsscsi
       lshw
-      cudatoolkit
       stdenv
       gnumake
       autoconf
@@ -138,9 +125,7 @@
       pet
       gerrit
       steam
-      ethash
-      ethminer
-      pkg-config
+      flashplayer
 
       #python3Packages.buildbot-full
       #python3Packages.buildbot-plugins
@@ -159,10 +144,46 @@
 
       # BROKEN
       #electricsheep
+      #beep
 
       # MISSING
       #puppet
       #sonos
       #xmms
+
+      # DEACTIVATE
+      #ethash
+      #ethminer
+      #pkg-config
+      #cudatoolkit
+      #cpuminer
+      #cpuminer-multi
+      #hostapd
+      #wirelesstools
+      #pcmciaUtils
+      #hologram
+      #ib-tws
+
+      (
+        vim_configurable.customize {
+          name = "vim-with-plugins";
+
+          vimrcConfig.packages.myVimPackage = with pkgs.vimPlugins; {
+            start = [
+              youcompleteme
+              fugitive
+              vim-nix
+              vim-go
+              vim-jsonnet
+              vim-jinja
+            ];
+          };
+
+          vimrcConfig.customRC = ''
+            syntax enable
+          '';
+          # autocmd FileType php :packadd phpCompletion
+        }
+      )
   ];
 }
