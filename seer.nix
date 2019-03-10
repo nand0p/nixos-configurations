@@ -175,6 +175,7 @@
 
     interactiveShellInit = ''
       alias mkpass="openssl rand -base64"
+      alias vi="vim-with-plugins"
       export PS1="\[$(tput setaf 10)\]\h \[$(tput setaf 13)\]\$(git branch 2>/dev/null | grep '^*' | colrm 1 2) \[$(tput setaf 12)\]\$PWD \[$(tput setaf 5)\]:\[$(tput sgr0)\]\T\[$(tput setaf 5)\]: \[$(tput sgr0)\]";
     '';
 
