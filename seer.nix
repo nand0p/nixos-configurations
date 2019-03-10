@@ -7,6 +7,7 @@
 
   imports = [
     ./hardware-configuration.nix
+    ./packages.nix
     ./private.nix
   ];
 
@@ -64,7 +65,7 @@
       allowedTCPPorts = [ 22 80 443 8010 8080 8888 ];
       allowPing = true;
     };
-    interfaces.enp4s0.ipv4.addresses = [ {
+    interfaces.enp2s0.ipv4.addresses = [ {
       address = "192.168.100.13";
       prefixLength = 24;
     } ];
@@ -85,6 +86,7 @@
   nixpkgs.config = {
     allowUnfree = true;
     allowBroken = true;
+    oraclejdk.accept_license = true;
   };
 
   virtualisation = {
@@ -176,151 +178,6 @@
       export PS1="\[$(tput setaf 10)\]\h \[$(tput setaf 13)\]\$(git branch 2>/dev/null | grep '^*' | colrm 1 2) \[$(tput setaf 12)\]\$PWD \[$(tput setaf 5)\]:\[$(tput sgr0)\]\T\[$(tput setaf 5)\]: \[$(tput sgr0)\]";
     '';
 
-    systemPackages = with pkgs; [
-      wget
-      curl
-      bind
-      sysstat
-      vnstat
-      dstat
-      htop
-      screen
-      tmux
-      mosh
-      nmap
-      zip
-      unzip
-      nload
-      iftop
-      iptraf-ng
-      bmon
-      tcptrack
-      slurm-llnl-full
-      nethogs
-      speedtest-cli
-      vim
-      vimPlugins.vim-nix
-      vimPlugins.vim-go
-      vimPlugins.vim-jsonnet
-      vimPlugins.vim-jinja
-      firefox
-      lsof
-      pciutils
-      tcpdump
-      netcat
-      jwhois
-      strace
-      google-chrome
-      spotify
-      openvpn
-      gimp
-      go
-      docker
-      terraform
-      chefdk
-      vagrant
-      packer
-      jenkins
-      git
-      vlc
-      mplayer
-      ruby
-      python3
-      python3Packages.virtualenv
-      python3Packages.distutils_extra
-      python3Packages.psycopg2
-      python3Packages.boto3
-      awscli
-      nginx
-      gnupg
-      parted
-      imagemagick
-      qutebrowser
-      vivaldi
-      dillo
-      arora
-      conkeror
-      transmission
-      transgui
-      virtualbox
-      xscreensaver
-      xorg.xhost
-      hdparm
-      gparted
-      dmidecode
-      screen
-      qemu
-      smartmontools
-      mkpasswd
-      openssl
-      file
-      telnet
-      electricsheep
-      gcc
-      binutils
-      ansible2
-      kdiff3
-      hologram
-      spectacle
-      stella
-      vpnc
-      openconnect
-      jq
-      traceroute
-      atop
-      libffi
-      bundler
-      exiftool
-      nodejs-10_x
-      maven
-      jdk8
-      postgresql96
-      libpqxx
-      groff
-      go-mtpfs
-      xpdf
-      git-review
-      kubernetes
-      gpgme
-      sddm
-      cmake
-      boost
-      libofx
-      cpuminer
-      cpuminer-multi
-      libreoffice
-      iotop
-      atop
-      ctop
-      ftop
-      beep
-      php
-      ib-tws
-      jdk8
-      pinentry
-      wireshark
-      httperf
-      hostapd
-      wirelesstools
-      pcmciaUtils
-      cdrtools
-      lsscsi
-      lshw
-
-      # GAMES
-      atari800
-      steam
-
-      # BROKEN
-      #buildbot-full
-      #buildbot-worker
-
-      # MISSING
-      #gerrit
-      #puppet
-      #sonos
-      #xmms
-    ];
   };
 
 }

@@ -2,3 +2,4 @@ nixpkgs/
 private.nix
 *configuration.nix*
 *.jar
+*.tar.gz
