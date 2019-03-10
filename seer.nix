@@ -65,7 +65,7 @@
       allowedTCPPorts = [ 22 80 443 8010 8080 8888 ];
       allowPing = true;
     };
-    interfaces.enp2s0.ipv4.addresses = [ {
+    interfaces.enp3s0.ipv4.addresses = [ {
       address = "192.168.100.13";
       prefixLength = 24;
     } ];
