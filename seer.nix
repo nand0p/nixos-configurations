@@ -65,7 +65,7 @@
       allowedTCPPorts = [ 22 80 443 8010 8080 8888 ];
       allowPing = true;
     };
-    interfaces.enp3s0.ipv4.addresses = [ {
+    interfaces.enp2s0.ipv4.addresses = [ {
       address = "192.168.100.13";
       prefixLength = 24;
     } ];
@@ -87,6 +87,8 @@
     allowUnfree = true;
     allowBroken = true;
     oraclejdk.accept_license = true;
+    cudaSupport = true;
+    enableCuda = true;
   };
 
   virtualisation = {
@@ -105,6 +107,7 @@
     transmission.enable = true;
     cron.enable = true;
     xserver = {
+      videoDrivers = [ "nvidia" "intel" ];
       enable = true;
       layout = "us";
       #autorun = false;

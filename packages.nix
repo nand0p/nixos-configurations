@@ -126,6 +126,7 @@
       gerrit
       steam
       flashplayer
+      cudatoolkit
 
       #python3Packages.buildbot-full
       #python3Packages.buildbot-plugins
@@ -155,7 +156,6 @@
       #ethash
       #ethminer
       #pkg-config
-      #cudatoolkit
       #cpuminer
       #cpuminer-multi
       #hostapd
