@@ -77,6 +77,20 @@
       desktopManager.plasma5.enable = true;
       displayManager.sddm.enable = true;
     };
+
+    ethminer = {
+      enable = true;
+      pool = "eth-us-east1.nanopool.org";
+      maxPower = 113;
+      recheckInterval = 2000;
+      toolkit = "cuda";
+      apiPort = -3333;
+
+      rig = "RIG";
+      wallet = "WALLET";
+      registerMail = "EMAIL";
+    };
+
   };
 
   environment = {
