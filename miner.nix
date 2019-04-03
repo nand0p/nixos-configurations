@@ -2,7 +2,7 @@
 {
 
   #
-  #      ==> diva <==
+  #      ==> miner <==
   #
 
   imports = [
