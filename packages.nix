@@ -96,7 +96,6 @@
       libpqxx
       groff
       go-mtpfs
-      xpdf
       git-review
       kubernetes
       gpgme
@@ -127,6 +126,7 @@
       steam
       flashplayer
       cudatoolkit
+      ethminer
 
       #python3Packages.buildbot-full
       #python3Packages.buildbot-plugins
@@ -143,10 +143,6 @@
       # GAMES
       atari800
 
-      # BROKEN
-      #electricsheep
-      #beep
-
       # MISSING
       #puppet
       #sonos
@@ -154,7 +150,6 @@
 
       # DEACTIVATE
       #ethash
-      #ethminer
       #pkg-config
       #cpuminer
       #cpuminer-multi
@@ -163,6 +158,14 @@
       #pcmciaUtils
       #hologram
       #ib-tws
+
+      # BROKEN
+      #electricsheep
+
+      # INSECURE
+      #xpdf
+      #beep
+
 
       (
         vim_configurable.customize {

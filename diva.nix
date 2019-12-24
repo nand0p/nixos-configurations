@@ -13,6 +13,7 @@
 
   system = {
     copySystemConfiguration = true;
+    stateVersion = "20.03";
   };
 
   boot = {
@@ -102,7 +103,7 @@
     transmission.enable = false;
     cron.enable = true;
     xserver = {
-      #videoDrivers = [ "nvidia" ];
+      videoDrivers = [ "nvidia" "intel" ];
       enable = true;
       layout = "us";
       autorun = true;
@@ -125,10 +126,10 @@
   };
 
   fonts = {
-    enableCoreFonts = true;
     enableFontDir = true;
     enableGhostscriptFonts = true;
     fonts = with pkgs; [
+      corefonts
       terminus_font
       font-awesome-ttf
       freefont_ttf
