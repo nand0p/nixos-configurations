@@ -9,7 +9,6 @@
     ./hardware-configuration.nix
     ./packages.nix
     ./private.nix
-    #./ethminer.nix
   ];
 
   system = {
@@ -27,11 +26,11 @@
       efi.canTouchEfiVariables = true;
       grub.memtest86 = true;
     };
-    #kernel.sysctl = {
-    #  "net.ipv4.tcp_keepalive_time" = 60;
-    #  "net.core.rmem_max" = 4194304;
-    #  "net.core.wmem_max" = 1048576;
-    #};
+    kernel.sysctl = {
+      "net.ipv4.tcp_keepalive_time" = 60;
+      "net.core.rmem_max" = 4194304;
+      "net.core.wmem_max" = 1048576;
+    };
   };
 
   i18n = {
@@ -51,7 +50,7 @@
       enable = true;
       support32Bit = true;
     };
-    opengl.driSupport32Bit = true;
+    #opengl.driSupport32Bit = true;
     enableAllFirmware = true;
     enableRedistributableFirmware = true;
   };
@@ -91,8 +90,8 @@
     allowUnfree = true;
     allowBroken = true;
     oraclejdk.accept_license = true;
-    cudaSupport = true;
-    enableCuda = true;
+    #cudaSupport = true;
+    #enableCuda = true;
   };
 
   virtualisation = {
@@ -126,6 +125,9 @@
     #  SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", MODE="0666"
     #  KERNEL=="uinput", MODE="0660", GROUP="users", OPTIONS+="static_node=uinput"
     #'';
+    #ntp = {
+    #  enable = false;
+    #};
   };
 
   programs = {
@@ -137,17 +139,19 @@
     };
   };
 
-  fonts = {
-    enableCoreFonts = true;
-    enableFontDir = true;
-    enableGhostscriptFonts = true;
-    #fonts = with pkgs; [
-    #  terminus_font
-    #  font-awesome-ttf
-    #  freefont_ttf
-    #  hack-font
-    #  liberation_ttf# ];
-  };
+#  fonts = {
+#    enableFontDir = true;
+#    enableGhostscriptFonts = true;
+#    fonts = with pkgs; [
+#      corefonts
+#      terminus_font
+#      font-awesome-ttf
+#      freefont_ttf
+#
+#      #hack-font
+#      #liberation_ttf# 
+#    ];
+#  };
 
   environment = {
     etc = {

@@ -19,9 +19,6 @@
       iptraf-ng
       bmon
       tcptrack
-      slurm-llnl-full
-      nethogs
-      speedtest-cli
       vim
       firefox
       lsof
@@ -45,18 +42,12 @@
       vlc
       mplayer
       ruby
-      python3
-      python3Packages.virtualenv
-      python3Packages.distutils_extra
-      python3Packages.psycopg2
-      python3Packages.boto3
+      python38Full
       awscli
       nginx
       gnupg
       parted
       imagemagick
-      qutebrowser
-      vivaldi
       dillo
       arora
       conkeror
@@ -103,7 +94,6 @@
       cmake
       boost
       libofx
-      libreoffice
       iotop
       atop
       ctop
@@ -123,16 +113,25 @@
       patchelf
       pet
       gerrit
-      steam
       flashplayer
+      tor-browser-bundle-bin
+      tdesktop
+      signal-desktop
+      libtiff
       cudatoolkit
       ethminer
+      googleearth
+      libreoffice
 
       #python3Packages.buildbot-full
       #python3Packages.buildbot-plugins
       #python3Packages.buildbot-ui
       #python3Packages.buildbot-pkg
       #python3Packages.buildbot-worker
+      #python3Packages.virtualenv
+      #python3Packages.distutils_extra
+      #python3Packages.psycopg2
+      #python3Packages.boto3
       #buildbot
       #buildbot-full
       #buildbot-plugins
@@ -142,6 +141,11 @@
 
       # GAMES
       atari800
+
+      # BROKEN
+      #electricsheep
+      #steam
+      #vivaldi
 
       # MISSING
       #puppet
@@ -158,14 +162,14 @@
       #pcmciaUtils
       #hologram
       #ib-tws
-
-      # BROKEN
-      #electricsheep
+      #slurm-llnl-full
+      #nethogs
+      #speedtest-cli
+      #qutebrowser
 
       # INSECURE
       #xpdf
       #beep
-
 
       (
         vim_configurable.customize {
