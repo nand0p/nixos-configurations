@@ -34,9 +34,12 @@
   };
 
   i18n = {
-    consoleFont = "Lat2-Terminus16";
-    consoleKeyMap = "us";
     defaultLocale = "en_US.UTF-8";
+  };
+
+  console = {
+    font = "Lat2-Terminus16";
+    keyMap = "us";
   };
 
   hardware = {
@@ -92,6 +95,7 @@
     oraclejdk.accept_license = true;
     #cudaSupport = true;
     #enableCuda = true;
+    #manual.manpages.enable = false;
   };
 
   virtualisation = {
@@ -139,19 +143,19 @@
     };
   };
 
-#  fonts = {
-#    enableFontDir = true;
-#    enableGhostscriptFonts = true;
-#    fonts = with pkgs; [
-#      corefonts
-#      terminus_font
-#      font-awesome-ttf
-#      freefont_ttf
-#
-#      #hack-font
-#      #liberation_ttf# 
-#    ];
-#  };
+  fonts = {
+    enableFontDir = true;
+    enableGhostscriptFonts = true;
+    fonts = with pkgs; [
+      corefonts
+      terminus_font
+      font-awesome-ttf
+      freefont_ttf
+
+      #hack-font
+      #liberation_ttf
+    ];
+  };
 
   environment = {
     etc = {
