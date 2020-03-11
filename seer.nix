@@ -12,7 +12,7 @@
   ];
 
   system = {
-    stateVersion = "19.03";
+    stateVersion = "20.03";
     copySystemConfiguration = true;
     autoUpgrade = {
       channel= "https://nixos.org/channels/nixos-unstable";
@@ -34,9 +34,12 @@
   };
 
   i18n = {
-    consoleFont = "Lat2-Terminus16";
-    consoleKeyMap = "us";
     defaultLocale = "en_US.UTF-8";
+  };
+
+  console = {
+    font = "Lat2-Terminus16";
+    keyMap = "us";
   };
 
   hardware = {
@@ -53,6 +56,10 @@
     opengl.driSupport32Bit = true;
     enableAllFirmware = true;
     enableRedistributableFirmware = true;
+    sane = {
+      enable = true;
+      extraBackends = [ pkgs.hplipWithPlugin ];
+    };
   };
 
   networking = {
@@ -89,15 +96,39 @@
     oraclejdk.accept_license = true;
     cudaSupport = true;
     enableCuda = true;
+    packageOverrides = pkgs: {
+      xsaneGimp = pkgs.xsane.override { gimpSupport = true; };
+    };
   };
 
   virtualisation = {
     docker = {
       enable = true;
-      #storageDriver = "btrfs";
+      enableOnBoot = true;
+      liveRestore = true;
+      listenOptions = [ "/var/run/docker.sock" ];
+      logDriver = "journald";
+      enableNvidia = false;
+      autoPrune = {
+        enable = true;
+        dates = "weekly";
+        flags = [];
+      };
+      extraOptions = "";
+      storageDriver = null;  # [ "aufs" "btrfs" "devicemapper" "overlay" "overlay2" "zfs" ]
     };
     virtualbox = {
-      host.enable = true;
+      guest = {
+        enable = true;
+        x11 = true;
+      };
+      host = {
+        enable = true;
+        enableExtensionPack = true;
+        enableHardening = true;
+        addNetworkInterface = true;
+        headless = false;
+      };
     };
   };
 
@@ -126,14 +157,14 @@
     #  enable = false;
     #  dialAddress = "hologram:3100";
     #};
-    #buildbot-master = {
-    #  enable = false;
-    #  package = pkgs.buildbot-full;
-    #  masterCfg = /etc/nixos/buildbot/master.cfg;
-    #};
-    #buildbot-worker = {
-    #  enable = false;
-    #};
+    buildbot-master = {
+      enable = true;
+      #package = pkgs.buildbot-full;
+      #masterCfg = /etc/nixos/buildbot/master.cfg;
+    };
+    buildbot-worker = {
+      enable = true;
+    };
   };
 
   programs = {
@@ -146,10 +177,10 @@
   };
 
   fonts = {
-    enableCoreFonts = true;
     enableFontDir = true;
     enableGhostscriptFonts = true;
     fonts = with pkgs; [
+      corefonts
       terminus_font
       font-awesome-ttf
       freefont_ttf

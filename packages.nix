@@ -53,7 +53,6 @@
       conkeror
       transmission
       transgui
-      virtualbox
       xscreensaver
       xorg.xhost
       hdparm
@@ -118,8 +117,8 @@
       tdesktop
       signal-desktop
       libtiff
-      cudatoolkit
-      ethminer
+      #cudatoolkit
+      #ethminer
       googleearth
       libreoffice
 
