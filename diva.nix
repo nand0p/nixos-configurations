@@ -94,9 +94,31 @@
   virtualisation = {
     docker = {
       enable = true;
+      enableOnBoot = true;
+      liveRestore = true;
+      listenOptions = [ "/var/run/docker.sock" ];
+      logDriver = "journald";
+      enableNvidia = false;
+      autoPrune = {
+        enable = true;
+        dates = "weekly";
+        flags = [];
+      };
+      extraOptions = "";
+      storageDriver = null;  # [ "aufs" "btrfs" "devicemapper" "overlay" "overlay2" "zfs" ]
     };
     virtualbox = {
-      host.enable = true;
+      guest = {
+        enable = true;
+        x11 = true;
+      };
+      host = {
+        enable = true;
+        enableExtensionPack = true;
+        enableHardening = true;
+        addNetworkInterface = true;
+        headless = false;
+      };
     };
   };
 
