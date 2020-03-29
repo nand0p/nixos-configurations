@@ -56,6 +56,10 @@
     #opengl.driSupport32Bit = true;
     enableAllFirmware = true;
     enableRedistributableFirmware = true;
+    sane = {
+      enable = true;
+      extraBackends = [ pkgs.hplipWithPlugin ];
+    };
   };
 
   networking = {
@@ -96,15 +100,39 @@
     #cudaSupport = true;
     #enableCuda = true;
     #manual.manpages.enable = false;
+    packageOverrides = pkgs: {
+      xsaneGimp = pkgs.xsane.override { gimpSupport = true; };
+    };
   };
 
   virtualisation = {
     docker = {
       enable = true;
-      #storageDriver = "btrfs";
+      enableOnBoot = true;
+      liveRestore = true;
+      listenOptions = [ "/var/run/docker.sock" ];
+      logDriver = "journald";
+      enableNvidia = false;
+      autoPrune = {
+        enable = true;
+        dates = "weekly";
+        flags = [];
+      };
+      extraOptions = "";
+      storageDriver = null;  # [ "aufs" "btrfs" "devicemapper" "overlay" "overlay2" "zfs" ]
     };
     virtualbox = {
-      host.enable = true;
+      guest = {
+        enable = true;
+        x11 = true;
+      };
+      host = {
+        enable = true;
+        enableExtensionPack = true;
+        enableHardening = true;
+        addNetworkInterface = true;
+        headless = false;
+      };
     };
   };
 
@@ -125,13 +153,6 @@
       enable = true;
       #drivers = [ pkgs.gutenprint ];
     };
-    #udev.extraRules = ''
-    #  SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", MODE="0666"
-    #  KERNEL=="uinput", MODE="0660", GROUP="users", OPTIONS+="static_node=uinput"
-    #'';
-    #ntp = {
-    #  enable = false;
-    #};
   };
 
   programs = {
