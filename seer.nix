@@ -24,7 +24,9 @@
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
-      grub.memtest86 = true;
+      grub.memtest86 = {
+        enable = true;
+      };
     };
     kernel.sysctl = {
       "net.ipv4.tcp_keepalive_time" = 60;

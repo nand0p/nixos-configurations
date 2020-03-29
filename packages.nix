@@ -50,7 +50,6 @@
       imagemagick
       dillo
       arora
-      conkeror
       transmission
       transgui
       xscreensaver
@@ -145,6 +144,7 @@
       #electricsheep
       #steam
       #vivaldi
+      #conkeror
 
       # MISSING
       #puppet
