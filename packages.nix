@@ -10,7 +10,6 @@
       htop
       screen
       tmux
-      mosh
       nmap
       zip
       unzip
@@ -33,9 +32,8 @@
       gimp
       go
       docker
-      terraform
+      #terraform
       chefdk
-      vagrant
       packer
       jenkins
       git
@@ -120,7 +118,9 @@
       #ethminer
       googleearth
       libreoffice
+      vagrant
 
+      # TESTING
       #python3Packages.buildbot-full
       #python3Packages.buildbot-plugins
       #python3Packages.buildbot-ui
@@ -136,6 +136,7 @@
       #buildbot-ui
       #buildbot-pkg
       #buildbot-worker
+      #cudatoolkit
 
       # GAMES
       atari800
@@ -145,6 +146,7 @@
       #steam
       #vivaldi
       #conkeror
+      #mosh
 
       # MISSING
       #puppet
@@ -176,7 +178,7 @@
 
           vimrcConfig.packages.myVimPackage = with pkgs.vimPlugins; {
             start = [
-              youcompleteme
+              YouCompleteMe
               fugitive
               vim-nix
               vim-go
@@ -185,9 +187,9 @@
             ];
           };
 
-          vimrcConfig.customRC = ''
-            syntax enable
-          '';
+          #vimrcConfig.customRC = ''
+          #  syntax enable
+          #'';
           # autocmd FileType php :packadd phpCompletion
         }
       )

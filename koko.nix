@@ -7,13 +7,13 @@
 
   imports = [
     ./hardware-configuration.nix
-    ./packages.nix
+    ./packages-slim.nix
     ./private.nix
   ];
 
   system = {
     copySystemConfiguration = true;
-    #stateVersion = "18.09";
+    stateVersion = "20.09";
     #autoUpgrade = {
     #  channel= "https://nixos.org/channels/nixos-unstable";
     #  enable = false;
@@ -21,11 +21,24 @@
   };
 
   boot = {
+
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
-      grub.memtest86 = true;
+      grub.memtest86.enable = true;
     };
+    #extraModprobeConfig = ''
+    #  install nouveau /run/current-system/sw/bin/false
+    #  #options nvidia-drm modeset=1
+    #'';
+    #extraModulePackages = [ config.boot.kernelPackages.nvidia_x11 ];
+    #kernelParams = [ "acpi_rev_override" ];
+    #initrd.kernelModules = [
+    #  "nvidia"
+    #  "nvidia_modeset"
+    #  "nvidia_uvm"
+    #  "nvidia_drm"
+    #];
     kernel.sysctl = {
       "net.ipv4.tcp_keepalive_time" = 60;
       "net.core.rmem_max" = 4194304;
@@ -43,6 +56,8 @@
   };
 
   hardware = {
+    #nvidia.modesetting.enable = true;
+    #opengl.driSupport32Bit = true;
     trackpoint = {
       enable = true;
       sensitivity = 50;
@@ -53,7 +68,6 @@
       enable = true;
       support32Bit = true;
     };
-    #opengl.driSupport32Bit = true;
     enableAllFirmware = true;
     enableRedistributableFirmware = true;
     sane = {
@@ -69,7 +83,7 @@
     useDHCP  = false;
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 22 ];
+      allowedTCPPorts = [ 22 6000 6001 ];
       allowPing = true;
     };
     interfaces.eno1.ipv4.addresses = [ {
@@ -94,11 +108,12 @@
   };
 
   nixpkgs.config = {
+    #cudaSupport = true;
+    #enableCuda = true;
+
     allowUnfree = true;
     allowBroken = true;
     oraclejdk.accept_license = true;
-    #cudaSupport = true;
-    #enableCuda = true;
     #manual.manpages.enable = false;
     packageOverrides = pkgs: {
       xsaneGimp = pkgs.xsane.override { gimpSupport = true; };
@@ -112,7 +127,6 @@
       liveRestore = true;
       listenOptions = [ "/var/run/docker.sock" ];
       logDriver = "journald";
-      enableNvidia = false;
       autoPrune = {
         enable = true;
         dates = "weekly";
@@ -120,6 +134,7 @@
       };
       extraOptions = "";
       storageDriver = null;  # [ "aufs" "btrfs" "devicemapper" "overlay" "overlay2" "zfs" ]
+      #enableNvidia = true;
     };
     virtualbox = {
       guest = {
@@ -143,6 +158,7 @@
     cron.enable = true;
     xserver = {
       videoDrivers = [ "nvidia" ];
+      #videoDrivers = [ "modesetting" "nvidia" ];
       enable = true;
       layout = "us";
       autorun = true;
@@ -154,6 +170,11 @@
       #drivers = [ pkgs.gutenprint ];
     };
   };
+
+  #systemd.services.nvidia-control-devices = {
+  #  wantedBy = [ "multi-user.target" ];
+  #  serviceConfig.ExecStart = "${pkgs.linuxPackages.nvidia_x11.bin}/bin/nvidia-smi";
+  #};
 
   programs = {
     bash = {
