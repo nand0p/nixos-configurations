@@ -7,12 +7,12 @@
 
   imports = [
     ./hardware-configuration.nix
-    ./packages.nix
+    ./packages-slim.nix
     ./private.nix
   ];
 
   system = {
-    stateVersion = "20.03";
+    stateVersion = "19.09";
     copySystemConfiguration = true;
     autoUpgrade = {
       channel= "https://nixos.org/channels/nixos-unstable";
@@ -39,10 +39,10 @@
     defaultLocale = "en_US.UTF-8";
   };
 
-  console = {
-    font = "Lat2-Terminus16";
-    keyMap = "us";
-  };
+  #console = {
+  #  font = "Lat2-Terminus16";
+  #  keyMap = "us";
+  #};
 
   hardware = {
     trackpoint = {
@@ -74,7 +74,7 @@
       allowedTCPPorts = [ 22 80 443 8010 8080 8888 ];
       allowPing = true;
     };
-    interfaces.enp2s0.ipv4.addresses = [ {
+    interfaces.eno1.ipv4.addresses = [ {
       address = "192.168.100.13";
       prefixLength = 24;
     } ];
@@ -93,14 +93,17 @@
   };
 
   nixpkgs.config = {
+    cudaSupport = false;
+    enableCuda = false;
     allowUnfree = true;
     allowBroken = true;
     oraclejdk.accept_license = true;
-    cudaSupport = true;
-    enableCuda = true;
     packageOverrides = pkgs: {
       xsaneGimp = pkgs.xsane.override { gimpSupport = true; };
     };
+    permittedInsecurePackages = [
+      "google-chrome-81.0.4044.138"
+    ];
   };
 
   virtualisation = {
@@ -127,7 +130,7 @@
       host = {
         enable = true;
         enableExtensionPack = true;
-        enableHardening = true;
+        enableHardening = false;
         addNetworkInterface = true;
         headless = false;
       };
@@ -136,14 +139,14 @@
 
   services = {
     openssh.enable = true;
-    locate.enable = true;
-    transmission.enable = true;
-    cron.enable = true;
+    locate.enable = false;
+    transmission.enable = false;
+    cron.enable = false;
     xserver = {
-      videoDrivers = [ "nvidia" "intel" ];
+      videoDrivers = [ "nvidiaLegacy390" ];
       enable = true;
       layout = "us";
-      #autorun = false;
+      autorun = true;
       desktopManager.plasma5.enable = true;
       displayManager.sddm.enable = true;
     };
@@ -155,18 +158,6 @@
       SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", MODE="0666"
       KERNEL=="uinput", MODE="0660", GROUP="users", OPTIONS+="static_node=uinput"
     '';
-    #hologram-agent = {
-    #  enable = false;
-    #  dialAddress = "hologram:3100";
-    #};
-    buildbot-master = {
-      enable = true;
-      #package = pkgs.buildbot-full;
-      #masterCfg = /etc/nixos/buildbot/master.cfg;
-    };
-    buildbot-worker = {
-      enable = true;
-    };
   };
 
   programs = {
@@ -197,8 +188,20 @@
         [core]
           editor = vim
         [user]
-          email = fernando.pando@stelligent.com
-          name = Fernando J Pando
+          email = nando@hex7.com
+          name = nando
+          signingkey = 22A06220A64D170143F987BA74F8771C340E27B8
+        [push]
+          default = simple
+        [pull]
+          rebase = true      
+        [commit]
+          gpgsign = true
+        [gpg]
+          program = gpg2
+        [credential]
+          helper = !aws codecommit --profile default credential-helper $@
+          UseHttpPath = true
       '';
     };
 
@@ -210,8 +213,7 @@
     };
 
     interactiveShellInit = ''
-      alias mkpass="openssl rand -base64"
-      alias vi="vim-with-plugins"
+      alias mkpass="openssl rand -base64 24"
       export PS1="\[$(tput setaf 10)\]\h \[$(tput setaf 13)\]\$(git branch 2>/dev/null | grep '^*' | colrm 1 2) \[$(tput setaf 12)\]\$PWD \[$(tput setaf 5)\]:\[$(tput sgr0)\]\T\[$(tput setaf 5)\]: \[$(tput sgr0)\]";
     '';
 
