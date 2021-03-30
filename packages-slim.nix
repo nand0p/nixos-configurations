@@ -32,7 +32,6 @@
       python38Full
       awscli
       gnupg
-      arora
       transmission
       transgui
       xscreensaver
@@ -45,11 +44,12 @@
       jq
       traceroute
       lshw
-      flashplayer
       tor-browser-bundle-bin
       googleearth
-      libreoffice
       vagrant
+      virtualbox
+      slack
+      tdesktop
 
       # GAMES
       atari800
@@ -57,7 +57,12 @@
 
       # BROKEN
       #electricsheep
+      #libreoffice
       #mosh
+
+      # REMOVED
+      #arora
+      #flashplayer
 
   ];
 }

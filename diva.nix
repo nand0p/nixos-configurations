@@ -7,21 +7,20 @@
 
   imports = [
     ./hardware-configuration.nix
-    ./packages.nix
+    ./packages-slim.nix
     ./private.nix
   ];
 
   system = {
     copySystemConfiguration = true;
-    stateVersion = "20.03";
+    #stateVersion = "20.03";
   };
 
   boot = {
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
-      grub.device = /dev/sda;
-      grub.memtest86 = true;
+      grub.memtest86.enable = true;
     };
   };
 
@@ -151,7 +150,7 @@
   };
 
   fonts = {
-    enableFontDir = true;
+    fontDir.enable = true;
     enableGhostscriptFonts = true;
     fonts = with pkgs; [
       corefonts
@@ -168,9 +167,11 @@
       "gitconfig".text = ''
         [core]
           editor = vim
+        [commit]
+          gpgsign = true
         [user]
-          email = fernando.pando@stelligent.com
-          name = Fernando J Pando
+          email = nando@hex7.com
+          name = nando
       '';
     };
 
@@ -184,7 +185,6 @@
 
     interactiveShellInit = ''
       alias mkpass="openssl rand -base64 16"
-      alias vi="vim-with-plugins"
       export PS1="\[$(tput setaf 10)\]\h \[$(tput setaf 13)\]\$(git branch 2>/dev/null | grep '^*' | colrm 1 2) \[$(tput setaf 12)\]\$PWD \[$(tput setaf 5)\]:\[$(tput sgr0)\]\T\[$(tput setaf 5)\]: \[$(tput sgr0)\]";
     '';
 
